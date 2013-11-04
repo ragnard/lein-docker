@@ -29,7 +29,10 @@
 (defn- ports
   [project]
   (let [ports (-> project :docker :ports)]
-    (concat (mapcat (fn [port] ["-p" (str port)])
+    (concat (mapcat (fn [port]
+                      (if-let [[host-port container-port] port]
+                        ["-p" (str host-port ":" container-port)]
+                        ["-p" port]))
                     ports))))
 
 (defn- env
