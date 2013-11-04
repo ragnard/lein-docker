@@ -43,7 +43,7 @@
 
 (defn- docker-deps-cache
   [project]
-  (let [deps-cache-dir-name ".lein-docker-deps"
+  (let [deps-cache-dir-name ".lein-docker-deps-cache"
         deps-cache-dir (str (:root project) "/" deps-cache-dir-name)]
     (.mkdirs (io/file deps-cache-dir))
     ["-v" (str  deps-cache-dir ":" "/root/.m2/repository")]))
