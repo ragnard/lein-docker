@@ -30,9 +30,11 @@
   [project]
   (let [ports (-> project :docker :ports)]
     (concat (mapcat (fn [port]
-                      (if-let [[host-port container-port] port]
-                        ["-p" (str host-port ":" container-port)]
-                        ["-p" port]))
+                      (cond
+                       (number? port) ["-p" port]
+
+                       :default       (let [[host-port container-port] port]
+                                        ["-p" (str host-port ":" container-port)])))
                     ports))))
 
 (defn- env
@@ -80,4 +82,5 @@
   (let [cmd (docker-cmd project args)]
     (println "Running leiningen in docker container using command:")
     (println (pr-str cmd) "\n")
-    (apply eval/sh cmd)))
+    #_(apply eval/sh cmd)
+    ))
